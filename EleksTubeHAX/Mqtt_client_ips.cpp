@@ -14,7 +14,7 @@
 #include "WiFi.h"       // for ESP32
 #include <PubSubClient.h>  // Download and install this library first from: https://www.arduinolibraries.info/libraries/pub-sub-client
 
-
+#include "DallasTemp2.h"
 
 WiFiClient espClient;
 PubSubClient MQTTclient(espClient);
@@ -34,11 +34,9 @@ void MqttReportBackOnChange();
 void MqttReportBackEverything();
 void MqttPeriodicReportBack();
 
-
-
 char topic[100];
 char msg[5];
-uint32_t lastTimeSent = -20000;
+uint32_t lastTimeSent = (uint32_t)(MQTT_REPORT_STATUS_EVERY_SEC * -1000);
 uint8_t LastNotificationChecksum = 0;
 uint32_t LastTimeTriedToConnect = 0;
 
@@ -53,7 +51,9 @@ bool MqttCommandStateReceived = false;
 bool MqttStatusPower = true;
 int MqttStatusState = 0;
 int MqttStatusBattery = 7;
-int MqttStatusTemperature = 5;
+float MqttStatusTemperature = 5;
+char MqttStatusTemperatureTxt[10];
+bool TemperatureUpdated = false;
 
 int LastSentSignalLevel = 999;
 int LastSentPowerState = -1;
@@ -182,10 +182,15 @@ void callback(char* topic, byte* payload, unsigned int length) {  //A new messag
       }
  }
 
-void MqttLoop(){
+void MqttLoopFrequently(){
 #ifdef MQTT_ENABLED
   MQTTclient.loop(); 
   checkMqtt();
+#endif  
+}
+
+void MqttLoopInFreeTime(){
+#ifdef MQTT_ENABLED
   MqttReportBackOnChange();
   MqttPeriodicReportBack();
 #endif  
@@ -207,10 +212,12 @@ void MqttReportStatus() {
 }    
 
 void MqttReportTemperature() {
-  char message2[5];
-  sprintf(message2, "%d", MqttStatusTemperature);
-//  sendToBroker("report/value", message2);
-  sendToBroker("report/temperature", message2);
+  #ifdef ONE_WIRE_BUS_PIN
+  GetTemperatureDS18B20();
+  if (MqttStatusTemperature > -30) { // transmit data to MQTT only if data is valid
+    sendToBroker("report/temperature", MqttStatusTemperatureTxt);
+  }
+  #endif  
 }    
 
 void MqttReportPowerState() {

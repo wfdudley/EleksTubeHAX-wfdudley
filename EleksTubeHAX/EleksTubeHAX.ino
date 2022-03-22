@@ -50,7 +50,7 @@ void setup() {
   tfts.begin();
   tfts.fillScreen(TFT_BLACK);
   tfts.setTextColor(TFT_WHITE, TFT_BLACK);
-  tfts.setCursor(0, 0, 2);
+  tfts.setCursor(0, 0, 2);  // Font 2. 16 pixel high
   tfts.println("setup...");
 
   // Setup WiFi connection. Must be done before setting up Clock.
@@ -113,7 +113,7 @@ void loop() {
 
   MqttStatusPower = tfts.isEnabled();
   MqttStatusState = (uclock.getActiveGraphicIdx()+1) * 5;   // 10 
-  MqttLoop();
+  MqttLoopFrequently();
   if (MqttCommandPowerReceived) {
     MqttCommandPowerReceived = false;
     if (MqttCommandPower) {
@@ -282,7 +282,7 @@ void loop() {
             tfts.clear();
             tfts.fillScreen(TFT_BLACK);
             tfts.setTextColor(TFT_WHITE, TFT_BLACK);
-            tfts.setCursor(0, 0, 4);
+            tfts.setCursor(0, 0, 4);  // Font 4. 26 pixel high
             WiFiStartWps();
           }
         }
@@ -302,6 +302,12 @@ void loop() {
     // we still have extra time
     time_in_loop = millis() - millis_at_top;
     if (time_in_loop < 20) {
+      MqttLoopInFreeTime();
+      if (TemperatureUpdated) {
+        tfts.setDigit(HOURS_ONES, uclock.getHoursTens(), TFTs::force);  // show latest 
+        TemperatureUpdated = false;
+      }
+      
       // run once a day (= 744 times per month which is below the limit of 5k for free account)
       if (FullHour && (uclock.getHour24() == 3)) { // Daylight savings time changes at 3 in the morning
         if (GetGeoLocationTimeZoneOffset()) {
@@ -325,7 +331,7 @@ void setupMenu() {
   tfts.chip_select.setHoursTens();
   tfts.setTextColor(TFT_WHITE, TFT_BLACK);
   tfts.fillRect(0, 120, 135, 120, TFT_BLACK);
-  tfts.setCursor(0, 124, 4);
+  tfts.setCursor(0, 124, 4);  // Font 4. 26 pixel high
 }
 
 void EveryFullHour() {

@@ -71,6 +71,8 @@
 
 #ifdef HARDWARE_SI_HAI_CLOCK  // fake chinese clock pinout XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
+//  #define ONE_WIRE_BUS_PIN (xx)  // DS18B20 connected to GPIOxx; comment this line if sensor is not connected
+
   // WS2812 (or compatible) LEDs on the back of the display modules.
   #define BACKLIGHTS_PIN (32)
 
@@ -122,7 +124,7 @@
   //#define LOAD_FONT8N // Font 8. Alternative to Font 8 above, slightly narrower, so 3 digits fit a 160 pixel TFT
   //#define LOAD_GFXFF  // FreeFonts. Include access to the 48 Adafruit_GFX free fonts FF1 to FF48 and custom fonts
 
-  #define SMOOTH_FONT
+  #define SMOOTH_FONT     // MUST REMAIN ACTIVE OTHERWISE BUTTON CONFIG IS CORRUPTED for some reason....
   //#define SPI_FREQUENCY  27000000
   #define SPI_FREQUENCY  40000000
   /*
@@ -133,6 +135,8 @@
 
 
 #else // original EleksTube IPS clock XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+
+  #define ONE_WIRE_BUS_PIN (4)  // DS18B20 connected to GPIO4; comment this line if sensor is not connected
 
   // WS2812 (or compatible) LEDs on the back of the display modules.
   #define BACKLIGHTS_PIN (12)
@@ -187,7 +191,7 @@
   //#define LOAD_FONT8N // Font 8. Alternative to Font 8 above, slightly narrower, so 3 digits fit a 160 pixel TFT
   //#define LOAD_GFXFF  // FreeFonts. Include access to the 48 Adafruit_GFX free fonts FF1 to FF48 and custom fonts
 
-  #define SMOOTH_FONT
+  #define SMOOTH_FONT     // MUST REMAIN ACTIVE OTHERWISE BUTTON CONFIG IS CORRUPTED for some reason....
   //#define SPI_FREQUENCY  27000000
   #define SPI_FREQUENCY  40000000
   /*
