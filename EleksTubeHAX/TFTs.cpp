@@ -33,7 +33,7 @@ void TFTs::showNoWifiStatus() {
 //  chip_select.setSecondsOnes();
   setTextColor(TFT_RED, TFT_BLACK);
   fillRect(0, TFT_HEIGHT - 27, TFT_WIDTH, 27, TFT_BLACK);
-  setCursor(5, TFT_HEIGHT-29, 4);  // Font 4. 26 pixel high
+  setCursor(5, TFT_HEIGHT - 27, 4);  // Font 4. 26 pixel high
   print("NO WIFI !");
   }
 
@@ -41,7 +41,7 @@ void TFTs::showNoMqttStatus() {
 //  chip_select.setSecondsTens();
   setTextColor(TFT_RED, TFT_BLACK);
   fillRect(0, TFT_HEIGHT - 27, TFT_WIDTH, 27, TFT_BLACK);
-  setCursor(5, TFT_HEIGHT-29, 4);
+  setCursor(5, TFT_HEIGHT - 27, 4);
   print("NO MQTT !");
   }
 
@@ -49,8 +49,8 @@ void TFTs::showTemperature() {
   #ifdef ONE_WIRE_BUS_PIN
 //    chip_select.setHoursOnes();
     setTextColor(TFT_BLUE, TFT_BLACK);
-    fillRect(0, TFT_HEIGHT - 20, TFT_WIDTH, 20, TFT_BLACK);
-    setCursor(5, TFT_HEIGHT-22, 2);  // Font 2. 16 pixel high
+    fillRect(0, TFT_HEIGHT - 17, TFT_WIDTH, 17, TFT_BLACK);
+    setCursor(5, TFT_HEIGHT - 17, 2);  // Font 2. 16 pixel high
     print("T: ");
     print(MqttStatusTemperatureTxt);
     print(" C");

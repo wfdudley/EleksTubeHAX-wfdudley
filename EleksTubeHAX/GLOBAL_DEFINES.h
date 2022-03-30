@@ -136,7 +136,7 @@
 
 #else // original EleksTube IPS clock XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-  #define ONE_WIRE_BUS_PIN (4)  // DS18B20 connected to GPIO4; comment this line if sensor is not connected
+//  #define ONE_WIRE_BUS_PIN (4)  // DS18B20 connected to GPIO4; comment this line if sensor is not connected
 
   // WS2812 (or compatible) LEDs on the back of the display modules.
   #define BACKLIGHTS_PIN (12)

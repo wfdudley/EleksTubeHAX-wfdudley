@@ -263,10 +263,7 @@ bool GetGeoLocationTimeZoneOffset() {
     Serial.println(String("Geo TZ Offset: ") + String(IPG.offset));  // we are interested in this one, type = double
     Serial.println(String("Geo DST: ") + String(IPG.is_dst));  // we are interested in this one, type = boolean
     Serial.println(String("Geo Current Time: ") + String(IPG.current_time)); // currently not used
-    if (IPG.is_dst)
-      GeoLocTZoffset = IPG.offset + 1; // add +1 hour
-    else
-      GeoLocTZoffset = IPG.offset;
+    GeoLocTZoffset = IPG.offset;  // DST offset is already included in Timezone offset! ignore the "is_dst" value.
 
     return true;
   } else {

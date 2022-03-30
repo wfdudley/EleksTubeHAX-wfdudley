@@ -47,8 +47,8 @@ void GetTemperatureDS18B20(){
 
   TemperatureUpdated = true;
  
-  //Serial.print(MqttStatusTemperature);
-  Serial.print("  /  ");
+  //Serial.print(MqttStatusTemperature); // print float directly, for testing purposes only
+  //Serial.print("  /  ");
   Serial.print(MqttStatusTemperatureTxt);
   Serial.println(" C");  
 }

@@ -26,6 +26,7 @@ StoredConfig stored_config;
 
 bool FullHour = false;
 uint8_t hour_old = 255;
+bool UpdateTZandDSTeveryNight = false;
 
 // Helper function, defined below.
 void updateClockDisplay(TFTs::show_t show=TFTs::yes);
@@ -309,10 +310,11 @@ void loop() {
       }
       
       // run once a day (= 744 times per month which is below the limit of 5k for free account)
-      if (FullHour && (uclock.getHour24() == 3)) { // Daylight savings time changes at 3 in the morning
+      if (UpdateTZandDSTeveryNight) { // Daylight savings time changes at 3 in the morning
         if (GetGeoLocationTimeZoneOffset()) {
           uclock.setTimeZoneOffset(GeoLocTZoffset * 3600);
         }
+      UpdateTZandDSTeveryNight = false;
       }  
       // Sleep for up to 20ms, less if we've spent time doing stuff above.
       time_in_loop = millis() - millis_at_top;
@@ -358,6 +360,7 @@ void EveryFullHour() {
         updateClockDisplay(TFTs::force); // update all
       }
     }
+    UpdateTZandDSTeveryNight = (uclock.getHour24() == 3); // Daylight savings time changes at 3 in the morning
     hour_old = current_hour;
   }   
 }
