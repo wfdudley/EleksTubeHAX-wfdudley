@@ -30,7 +30,7 @@ void TFTs::clear() {
 }
 
 void TFTs::showNoWifiStatus() {
-//  chip_select.setSecondsOnes();
+  chip_select.setSecondsOnes();
   setTextColor(TFT_RED, TFT_BLACK);
   fillRect(0, TFT_HEIGHT - 27, TFT_WIDTH, 27, TFT_BLACK);
   setCursor(5, TFT_HEIGHT - 27, 4);  // Font 4. 26 pixel high
@@ -38,7 +38,7 @@ void TFTs::showNoWifiStatus() {
   }
 
 void TFTs::showNoMqttStatus() {
-//  chip_select.setSecondsTens();
+  chip_select.setSecondsTens();
   setTextColor(TFT_RED, TFT_BLACK);
   fillRect(0, TFT_HEIGHT - 27, TFT_WIDTH, 27, TFT_BLACK);
   setCursor(5, TFT_HEIGHT - 27, 4);
@@ -47,8 +47,8 @@ void TFTs::showNoMqttStatus() {
 
 void TFTs::showTemperature() { 
   #ifdef ONE_WIRE_BUS_PIN
-//    chip_select.setHoursOnes();
-    setTextColor(TFT_BLUE, TFT_BLACK);
+    chip_select.setHoursOnes();
+    setTextColor(TFT_CYAN, TFT_BLACK);
     fillRect(0, TFT_HEIGHT - 17, TFT_WIDTH, 17, TFT_BLACK);
     setCursor(5, TFT_HEIGHT - 17, 2);  // Font 2. 16 pixel high
     print("T: ");

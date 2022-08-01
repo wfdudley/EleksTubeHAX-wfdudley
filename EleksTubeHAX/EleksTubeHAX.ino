@@ -118,6 +118,11 @@ void loop() {
   if (MqttCommandPowerReceived) {
     MqttCommandPowerReceived = false;
     if (MqttCommandPower) {
+#ifndef HARDWARE_SI_HAI_CLOCK
+      tfts.begin();  // reinit (original EleksTube HW: after a few hours in OFF state the displays do not wake up properly)
+      tfts.enableAllDisplays();
+      updateClockDisplay(TFTs::force);
+#endif
       tfts.enableAllDisplays();
       backlights.PowerOn();
     } else {
@@ -152,6 +157,13 @@ void loop() {
   // Power button: If in menu, exit menu. Else turn off displays and backlight.
   if (buttons.power.isDownEdge() && (menu.getState() == Menu::idle)) {
     tfts.toggleAllDisplays();
+#ifndef HARDWARE_SI_HAI_CLOCK
+    if (tfts.isEnabled()) {
+      tfts.begin();  // reinit (original EleksTube HW: after a few hours in OFF state the displays do not wake up properly)
+      tfts.enableAllDisplays();
+      updateClockDisplay(TFTs::force);
+    }
+#endif
     backlights.togglePower();
   }
  
@@ -305,7 +317,7 @@ void loop() {
     if (time_in_loop < 20) {
       MqttLoopInFreeTime();
       if (TemperatureUpdated) {
-        tfts.setDigit(HOURS_ONES, uclock.getHoursTens(), TFTs::force);  // show latest 
+        tfts.setDigit(HOURS_ONES, uclock.getHoursOnes(), TFTs::force);  // show latest clock digit and temperature readout together
         TemperatureUpdated = false;
       }
       

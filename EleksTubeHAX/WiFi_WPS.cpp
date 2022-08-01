@@ -125,7 +125,7 @@ That is, assuming cred[0].ssid is defined as an array... you may be better off u
       Serial.println("WPS Timeout, retrying");
       tfts.setTextColor(TFT_RED, TFT_BLACK);      
       tfts.print("/");  // retry
-      tfts.setTextColor(TFT_BLUE, TFT_BLACK);
+      tfts.setTextColor(TFT_MAGENTA, TFT_BLACK);
       esp_wifi_wps_disable();
       esp_wifi_wps_enable(&wps_config);
       esp_wifi_wps_start(0);
@@ -227,7 +227,7 @@ bool WiFiStartWps() {
 
 
   // loop until connected
-  tfts.setTextColor(TFT_BLUE, TFT_BLACK);
+  tfts.setTextColor(TFT_PURPLE, TFT_BLACK);
   while (WifiState != connected) {
     delay(2000);
     tfts.print(".");
