@@ -15,7 +15,7 @@
 #include "Menu.h"
 #include "StoredConfig.h"
 #include "WiFi_WPS.h"
-#include "mqtt_client_ips.h"
+#include "Mqtt_client_ips.h"
 
 Backlights backlights;
 Buttons buttons;
@@ -119,9 +119,10 @@ void loop() {
     MqttCommandPowerReceived = false;
     if (MqttCommandPower) {
 #ifndef HARDWARE_SI_HAI_CLOCK
-      tfts.begin();  // reinit (original EleksTube HW: after a few hours in OFF state the displays do not wake up properly)
-      tfts.enableAllDisplays();
-      updateClockDisplay(TFTs::force);
+      if (!tfts.isEnabled()) {
+        tfts.reinit();  // reinit (original EleksTube HW: after a few hours in OFF state the displays do not wake up properly)
+        updateClockDisplay(TFTs::force);
+      }
 #endif
       tfts.enableAllDisplays();
       backlights.PowerOn();
@@ -159,8 +160,7 @@ void loop() {
     tfts.toggleAllDisplays();
 #ifndef HARDWARE_SI_HAI_CLOCK
     if (tfts.isEnabled()) {
-      tfts.begin();  // reinit (original EleksTube HW: after a few hours in OFF state the displays do not wake up properly)
-      tfts.enableAllDisplays();
+      tfts.reinit();  // reinit (original EleksTube HW: after a few hours in OFF state the displays do not wake up properly)
       updateClockDisplay(TFTs::force);
     }
 #endif

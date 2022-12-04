@@ -1,6 +1,6 @@
 #include "TFTs.h"
 #include "WiFi_WPS.h"
-#include "mqtt_client_ips.h"
+#include "Mqtt_client_ips.h"
 
 void TFTs::begin() {
   // Start with all displays selected.
@@ -21,6 +21,19 @@ void TFTs::begin() {
   }
 
   NumberOfClockFaces = CountNumberOfClockFaces();
+}
+
+void TFTs::reinit() {
+  // Start with all displays selected.
+  chip_select.begin();
+  chip_select.setAll();
+
+  // Turn power on to displays.
+  pinMode(TFT_ENABLE_PIN, OUTPUT);
+  enableAllDisplays();
+
+  // Initialize the super class.
+  init();
 }
 
 void TFTs::clear() {

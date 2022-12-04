@@ -17,7 +17,7 @@
 //#define DEBUG_OUTPUT
 
 #define DEVICE_NAME       "IPS-clock"
-#define FIRMWARE_VERSION  "aly-fly IPS clock v0.3"
+#define FIRMWARE_VERSION  "aly-fly IPS clock v0.7"
 #define SAVED_CONFIG_NAMESPACE  "configs"
 #define USE_CLK_FILES   // select between .CLK and .BMP images
 #define NIGHT_TIME  22 // dim displays at 10 pm 

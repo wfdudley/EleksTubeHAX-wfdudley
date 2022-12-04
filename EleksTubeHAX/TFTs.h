@@ -26,6 +26,7 @@ public:
   uint8_t current_graphic = 1;
   
   void begin();
+  void reinit();
   void clear();
   void showNoWifiStatus();
   void showNoMqttStatus();
