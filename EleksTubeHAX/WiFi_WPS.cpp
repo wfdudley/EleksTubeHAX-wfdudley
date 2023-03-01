@@ -3,19 +3,21 @@
 #include "StoredConfig.h"
 #include "TFTs.h"
 #include "esp_wps.h"
-
 #include "WiFi_WPS.h"
+#include "GLOBAL_DEFINES.h"
+
 #include "IPGeolocation_AO.h"
 
 extern StoredConfig stored_config;
 
 WifiState_t WifiState = disconnected;
 
-static esp_wps_config_t wps_config;
 uint32_t TimeOfWifiReconnectAttempt = 0;
 double GeoLocTZoffset = 0;
 
+#ifdef WIFI_USE_WPS   ////  WPS code
 
+static esp_wps_config_t wps_config;
 void wpsInitConfig(){
   wps_config.crypto_funcs = &g_wifi_default_wps_crypto_funcs;
   wps_config.wps_type = ESP_WPS_MODE;
@@ -24,6 +26,7 @@ void wpsInitConfig(){
   strcpy(wps_config.factory_info.model_name, ESP_MODEL_NAME);
   strcpy(wps_config.factory_info.device_name, DEVICE_NAME);
 }
+#endif
 
 
 void WiFiEvent(WiFiEvent_t event, system_event_info_t info){
@@ -113,6 +116,7 @@ That is, assuming cred[0].ssid is defined as an array... you may be better off u
 // https://stackoverflow.com/questions/48024780/esp32-wps-reconnect-on-power-on      
       WiFi.begin();
       break;
+#ifdef WIFI_USE_WPS   ////  WPS code
     case SYSTEM_EVENT_STA_WPS_ER_FAILED:
       WifiState = wps_failed;
       Serial.println("WPS Failed, retrying");
@@ -131,6 +135,7 @@ That is, assuming cred[0].ssid is defined as an array... you may be better off u
       esp_wifi_wps_start(0);
       WifiState = wps_active;
       break;
+#endif
     default:
       break;
   }
@@ -146,14 +151,10 @@ void WifiBegin()  {
   WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);  
   WiFi.setHostname(DEVICE_NAME);  
 
+#ifdef WIFI_USE_WPS   ////  WPS code
   // no data is saved, start WPS imediatelly
   if (stored_config.config.wifi.WPS_connected != StoredConfig::valid) {
     // Config is invalid, probably a new device never had its config written.
-    Serial.println("Loaded Wifi config is invalid. Not connecting to WiFi.");
-    WiFiStartWps();  // infinite loop until connected
-  } else {
-    // data is saved, connect now
-    // WiFi credentials are known, connect
     tfts.println("Joining wifi");
     tfts.println(stored_config.config.wifi.ssid);
     Serial.print("Joining wifi ");
@@ -169,14 +170,31 @@ void WifiBegin()  {
       tfts.print(".");
       Serial.print(".");
       if ((millis() - StartTime) > (WIFI_CONNECT_TIMEOUT_SEC * 1000)) {
-        Serial.println("\r\nWiFi connection timeout!");
-        tfts.println("\nTIMEOUT!");
-        WifiState = disconnected;
-        return; // exit loop, exit procedure, continue clock startup
-//        WiFiStartWps(); // infinite loop until connected
+	Serial.println("\r\nWiFi connection timeout!");
+	tfts.println("\nTIMEOUT!");
+	WifiState = disconnected;
+	return; // exit loop, exit procedure, continue clock startup
+  //        WiFiStartWps(); // infinite loop until connected
       }
     }
   }
+#else	////NO WPS -- Hard coded credentials
+
+  WiFi.begin(SECRET_WIFI_SSID, SECRET_WIFI_PASSWD); 
+  unsigned long StartTime = millis();
+  while ((WiFi.status() != WL_CONNECTED)) {
+    delay(500);
+    tfts.print(".");
+    Serial.print(".");
+    if ((millis() - StartTime) > (WIFI_CONNECT_TIMEOUT_SEC * 1000)) {
+      Serial.println("\r\nWiFi connection timeout!");
+      tfts.println("\nTIMEOUT!");
+      WifiState = disconnected;
+      return; // exit loop, exit procedure, continue clock startup
+    }
+  }
+
+#endif
  
   WifiState = connected;
 
@@ -199,7 +217,7 @@ void WifiReconnect() {
   }    
 }
 
-
+#ifdef WIFI_USE_WPS   ////  WPS code
 bool WiFiStartWps() {
   // erase settings
   sprintf(stored_config.config.wifi.ssid, ""); 
@@ -244,6 +262,7 @@ bool WiFiStartWps() {
   stored_config.save();
   Serial.println(" WPS finished."); 
 }
+#endif
 
 
 // Get an API Key by registering on
