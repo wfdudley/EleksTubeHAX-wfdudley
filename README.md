@@ -31,8 +31,7 @@ I can fit two large fonts and three small fonts in the revised partition.
 
 This code won't quite fit in a 1M/3M partition setup, so you need to create
 a new 1.1M/2.9M partition scheme.
-Use this reference:
-![https://robotzero.one/arduino-ide-partitions/](https://robotzero.one/arduino-ide-partitions/)
+Use this reference: https://robotzero.one/arduino-ide-partitions/
 
 I created a new partition scheme:
 
