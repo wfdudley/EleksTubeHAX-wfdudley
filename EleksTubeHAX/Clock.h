@@ -38,7 +38,7 @@ public:
   void setTimeZoneOffset(time_t offset) { config->time_zone_offset = offset; }
   time_t getTimeZoneOffset()            { return config->time_zone_offset; }
   void adjustTimeZoneOffset(time_t adj) { config->time_zone_offset += adj; }
-  void  setActiveGraphicIdx(int8_t idx) { config->selected_graphic = idx;}
+  void  setActiveGraphicIdx(int8_t idx) { if(tfts.ClockFacesPresent[idx]) { config->selected_graphic = idx;}}
   int8_t getActiveGraphicIdx()          { return config->selected_graphic; }
   void adjustClockGraphicsIdx(int8_t adj) {
     config->selected_graphic += adj;
