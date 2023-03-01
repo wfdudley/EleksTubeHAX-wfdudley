@@ -49,14 +49,15 @@ public:
 
 
   uint8_t NumberOfClockFaces = 0;
+  bool ClockFacesPresent[10];
   void LoadNextImage();
   void InvalidateImageInBuffer(); // force reload from Flash with new dimming settings
+  bool FileExists(const char* path);
 
 private:
   uint8_t digits[NUM_DIGITS];
   bool enabled;
 
-  bool FileExists(const char* path);
   int8_t CountNumberOfClockFaces();
   bool LoadImageIntoBuffer(uint8_t file_index);
   void DrawImage(uint8_t file_index);

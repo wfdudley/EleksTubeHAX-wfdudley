@@ -152,12 +152,14 @@ int8_t TFTs::CountNumberOfClockFaces() {
   char filename[10];
 
   Serial.print("Searching for BMP clock files... ");
-  found = 0;
+  found = 10;
   for (i=1; i < 10; i++) {
     sprintf(filename, "/%d.bmp", i*10); // search for files 10.bmp, 20.bmp,...
     if (!FileExists(filename)) {
-      found = i-1;
-      break;
+	ClockFacesPresent[i-1] = 0;
+    }
+    else {
+	ClockFacesPresent[i-1] = 1;
     }
   }
   Serial.print(found);
@@ -273,12 +275,14 @@ int8_t TFTs::CountNumberOfClockFaces() {
   char filename[10];
 
   Serial.print("Searching for CLK clock files... ");
-  found = 0;
+  found = 10;
   for (i=1; i < 10; i++) {
     sprintf(filename, "/%d.clk", i*10); // search for files 10.clk, 20.clk,...
     if (!FileExists(filename)) {
-      found = i-1;
-      break;
+	ClockFacesPresent[i-1] = 0;
+    }
+    else {
+	ClockFacesPresent[i-1] = 1;
     }
   }
   Serial.print(found);
