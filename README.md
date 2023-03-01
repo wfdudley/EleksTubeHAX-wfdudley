@@ -55,9 +55,9 @@ I copied the three lines that start:
 
 and pasted and edited the copied lines to look like this:
 
-`esp32wrover.menu.PartitionScheme.noota_2g=No OTA (1.2MB APP/2.9MB SPIFFS)`
-`esp32wrover.menu.PartitionScheme.noota_2g.build.partitions=noota_2g`
-`esp32wrover.menu.PartitionScheme.noota_2g.upload.maximum_size=1179648`
+`esp32wrover.menu.PartitionScheme.noota_2g=No OTA (1.2MB APP/2.9MB SPIFFS)
+esp32wrover.menu.PartitionScheme.noota_2g.build.partitions=noota_2g
+esp32wrover.menu.PartitionScheme.noota_2g.upload.maximum_size=1179648`
 
 You will note that the second line references the csv file we created
 in the first step.
