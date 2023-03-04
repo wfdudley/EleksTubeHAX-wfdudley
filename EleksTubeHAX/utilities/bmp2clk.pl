@@ -39,7 +39,7 @@
 	chomp($size = `file $bmpfile`);
 	my $width = $size;
 	my $height = $size;
-	if($size =~ /, ([1-9][0-9]*) x ([1-9][0-9]*) x ([1-9][0-9]*),/) {
+	if($size =~ /, ([1-9][0-9]*) x ([1-9][0-9]*) x ([1-9][0-9]*)/) {
 	    $debug && printf("match /, ([1-9][0-9]*) x ([1-9][0-9]*) x ([1-9][0-9]*),/, \$1 = %s, \$2 = %s\n", $1, $2);
 	    $width = $1;
 	    $height = $2;
