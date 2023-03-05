@@ -54,3 +54,36 @@ update for Python if needed.)
 information about what was in the original firmware, such as what libraries were used, etc.
 
 -Mark
+
+Additional by wfdudley:
+
+The stock image files are 64800 bytes long, which is
+exactly 135 (rows) * 240 (columns) * (2 bytes/integer)
+
+You can split the image files using the unix "split" utility:
+
+split -b 64800 -d -t '\0' big-font-blob
+
+generates 10 or 11 files (some fonts have an 11th "blank" character)
+
+You can look at the extracted images with this tool:
+
+Look at raw image files with https://rawpixels.net/
+just specify RGB565 format and proper width and height.
+
+The .CLK files can also be viewed using this tool, by specifying
+an offset of 6 bytes from the beginning.  This skips over the
+"magic number" "CK" at the beginning, followed by the width and height
+as 16 bit integers.
+
+You can also use the scripts in the utilities to change image file
+formats between .raw, .clk, .png, and .bmp.  For the last two,
+the ffmpeg utility does the work.  Unfortunately, ffmpeg has
+a buggy conversion from .png to .raw, so use .bmp for your
+archival storage and conversion.
+
+Finally, you can use these unix tools on your Winders system by installing
+the Cygwin environment (www.cygwin.com).
+
+Bill Dudley
+March 5 2023
