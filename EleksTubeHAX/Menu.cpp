@@ -25,13 +25,24 @@ void Menu::loop(Buttons &buttons) {
     return;
   }
   
-  // Menu is idle. A button is pressed, go into the menu, but don't act on the button press. It just wakes up the menu.
-  if (state == idle && (left_state == Button::down_edge || right_state == Button::down_edge || mode_state == Button::down_edge)) {
-    state = states(1);  // Start at the beginning of the menu.
+  // Menu is idle. Left or Mode button is pressed, go into the menu, but don't act on the button press. It just wakes up the menu.
+  if(state == idle) {
+    if (left_state == Button::down_edge || mode_state == Button::down_edge) {
+      state = states(1);  // Start at the beginning of the menu.
 
-    millis_last_button_press = millis();
-    state_changed = true;
-    return;
+      millis_last_button_press = millis();
+      state_changed = true;
+      return;
+    }
+  
+  // Menu is idle. Right button is pressed, go into the font menu, but don't act on the button press. It just wakes up the menu.
+    if (right_state == Button::down_edge) {
+      state = states(8);  // Jump to the selected_graphic menu.
+
+      millis_last_button_press = millis();
+      state_changed = true;
+      return;
+    }
   }
 
   // Go to the next menu option
