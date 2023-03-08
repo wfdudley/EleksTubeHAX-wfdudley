@@ -18,7 +18,6 @@
 
 //#define DEBUG_OUTPUT
 
-#define DEVICE_NAME       "IPS-clock"
 #define FIRMWARE_VERSION  "dudley IPS clock v0.8"
 #define SAVED_CONFIG_NAMESPACE  "configs"
 #define USE_CLK_FILES	// select between .CLK and .BMP images
