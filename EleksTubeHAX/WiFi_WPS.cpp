@@ -155,11 +155,16 @@ void WifiBegin()  {
   // no data is saved, start WPS imediatelly
   if (stored_config.config.wifi.WPS_connected != StoredConfig::valid) {
     // Config is invalid, probably a new device never had its config written.
+    Serial.println("Loaded Wifi config is invalid. Not connecting to WiFi.");
+    WiFiStartWps();  // infinite loop until connected
+  } else {
+    // data is saved, connect now
+    // WiFi credentials are known, connect
     tfts.println("Joining wifi");
     tfts.println(stored_config.config.wifi.ssid);
     Serial.print("Joining wifi ");
     Serial.println(stored_config.config.wifi.ssid);
-    
+  
     // https://stackoverflow.com/questions/48024780/esp32-wps-reconnect-on-power-on
     WiFi.begin();  // use internally saved data
 
@@ -170,11 +175,11 @@ void WifiBegin()  {
       tfts.print(".");
       Serial.print(".");
       if ((millis() - StartTime) > (WIFI_CONNECT_TIMEOUT_SEC * 1000)) {
-	Serial.println("\r\nWiFi connection timeout!");
-	tfts.println("\nTIMEOUT!");
-	WifiState = disconnected;
-	return; // exit loop, exit procedure, continue clock startup
-  //        WiFiStartWps(); // infinite loop until connected
+        Serial.println("\r\nWiFi connection timeout!");
+        tfts.println("\nTIMEOUT!");
+        WifiState = disconnected;
+        return; // exit loop, exit procedure, continue clock startup
+//        WiFiStartWps(); // infinite loop until connected
       }
     }
   }
