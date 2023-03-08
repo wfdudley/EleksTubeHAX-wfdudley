@@ -35,7 +35,7 @@ void updateClockDisplay(TFTs::show_t show=TFTs::yes);
 void setupMenu();
 void EveryFullHour();
 static int SUIMODE;	// Serial UI Mode
-#define SUINIL 0
+#define SUI_NIL 0
 #define SUISSID 1
 #define SUIPASS 2
 char cmdbuf[33];	// command buffer
@@ -128,7 +128,7 @@ int ch;
 	    if(ch == '\r' || ch == '\n') {
 		strncpy(stored_config.config.wifi.ssid, cmdbuf, 32);
 		Serial.printf("ssid set to %s\n", stored_config.config.wifi.ssid);
-		SUIMODE = SUINIL;
+		SUIMODE = SUI_NIL;
 	    }
 	    else {
 		cmdbuf[cmdidx] = ch;
@@ -147,7 +147,7 @@ int ch;
 		if (err != ESP_OK) {
 		    Serial.printf("Couldn't set config: %d\n", (int)err);
 		}
-		SUIMODE = SUINIL;
+		SUIMODE = SUI_NIL;
 	    }
 	    else {
 		cmdbuf[cmdidx] = ch;
