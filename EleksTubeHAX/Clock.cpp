@@ -6,10 +6,11 @@
   #include <RtcDS1302.h>
   ThreeWire myWire(DS1302_IO, DS1302_SCLK, DS1302_CE); // IO, SCLK, CE
   RtcDS1302<ThreeWire> Rtc(myWire);
+
   uint32_t RtcBegin() {
     Rtc.Begin();
     // check if chip is connected and alive
-/*  TCS default value is 0x00 instead of 0x5C, but RTC seems to be working. Let's skip this check.
+  /*  TCS default value is 0x00 instead of 0x5C, but RTC seems to be working. Let's skip this check.
     Serial.print("Checking DS1302 RTC... ");
     uint8_t TCS = Rtc.GetTrickleChargeSettings();  // 01011100  Initial power-on state
     Serial.print("TCS = ");
@@ -17,24 +18,24 @@
     if (TCS != 0x5C) {
       Serial.println("Error communicating with DS1302 !");
     }
-*/
+  */
     if (!Rtc.IsDateTimeValid()) {
-        // Common Causes:
-        //    1) first time you ran and the device wasn't running yet
-        //    2) the battery on the device is low or even missing
-        Serial.println("RTC lost confidence in the DateTime!");
+	// Common Causes:
+	//    1) first time you ran and the device wasn't running yet
+	//    2) the battery on the device is low or even missing
+	Serial.println("RTC lost confidence in the DateTime!");
     }
     if (Rtc.GetIsWriteProtected()) {
-        Serial.println("RTC was write protected, enabling writing now");
-        Rtc.SetIsWriteProtected(false);
+	Serial.println("RTC was write protected, enabling writing now");
+	Rtc.SetIsWriteProtected(false);
     }
 
     if (!Rtc.GetIsRunning()) {
-        Serial.println("RTC was not actively running, starting now");
-        Rtc.SetIsRunning(true);
-        }
+	Serial.println("RTC was not actively running, starting now");
+	Rtc.SetIsRunning(true);
+    }
   }
-        
+	  
   uint32_t RtcGet() {
     return Rtc.GetDateTime();  
   }
@@ -88,15 +89,16 @@ void Clock::loop() {
   }
 }
 
-
 // Static methods used for sync provider to TimeLib library.
 time_t Clock::syncProvider() {
+  extern uint8_t weekd;
   Serial.println("syncProvider()");
   time_t ntp_now, rtc_now;
   rtc_now = RtcGet();
 
-  if (millis() - millis_last_ntp > refresh_ntp_every_ms || millis_last_ntp == 0) {
-    if (WifiState == connected) { 
+  Serial.print("syncProvider: weekday is "); Serial.println(weekd);
+  if ((millis() - millis_last_ntp > refresh_ntp_every_ms) && (weekd == 1) || millis_last_ntp == 0) {
+    if (WifiState == connected) {
       // It's time to get a new NTP sync
       Serial.print("Getting NTP.");
 //      ntpTimeClient.forceUpdate();  // maybe this breaks the NTP requests as this should not be done more than every minute.

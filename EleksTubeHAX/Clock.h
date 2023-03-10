@@ -24,6 +24,7 @@ public:
   // Calls NTPClient::getEpochTime() or RTC::get() as appropriate
   // This has to be static to pass to TimeLib::setSyncProvider.
   static time_t syncProvider();
+  uint8_t GetWD(void);
 
   // Set preferred hour format. true = 12hr, false = 24hr
   void setTwelveHour(bool th)           { config->twelve_hour = th; }
@@ -56,6 +57,7 @@ public:
   uint16_t getYear()       { return year(local_time); }
   uint8_t getMonth()       { return month(local_time); }
   uint8_t getDay()         { return day(local_time); }
+  uint8_t getWeekDay()     { return weekday(local_time); }
   uint8_t getHour()        { return config->twelve_hour ? hourFormat12(local_time) : hour(local_time); }
   uint8_t getHour12()      { return hourFormat12(local_time); }
   uint8_t getHour24()      { return hour(local_time); }
@@ -65,6 +67,12 @@ public:
   bool isPm()              { return isPM(local_time); }
 
   // Helper functions for making a clock.
+  uint8_t getYearTens()     { return (getYear()/10)%10; }
+  uint8_t getYearOnes()     { return getYear()%10; }
+  uint8_t getMonthTens()    { return getMonth()/10; }
+  uint8_t getMonthOnes()    { return getMonth()%10; }
+  uint8_t getDayTens()      { return getDay()/10; }
+  uint8_t getDayOnes()      { return getDay()%10; }
   uint8_t getHoursTens();
   uint8_t getHoursOnes()    { return getHour()%10; }
   uint8_t getHours12Tens()  { return getHour12()/10; }

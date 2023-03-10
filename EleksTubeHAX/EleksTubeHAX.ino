@@ -28,10 +28,14 @@ StoredConfig stored_config;
 
 bool FullHour = false;
 uint8_t hour_old = 255;
+uint8_t weekd, month_now, date_now;
+unsigned long date_display_timer;
+bool first_date_display, first_time_display;
 bool UpdateTZandDSTeveryNight = false;
 
 // Helper function, defined below.
 void updateClockDisplay(TFTs::show_t show=TFTs::yes);
+void updateClockDateDisplay(TFTs::show_t show=TFTs::yes);
 void setupMenu();
 void EveryFullHour();
 static int SUIMODE;	// Serial UI Mode
@@ -237,12 +241,17 @@ void setup() {
   // Start up the clock displays.
   tfts.fillScreen(TFT_BLACK);
   uclock.loop();
+  weekd = uclock.getWeekDay();
   updateClockDisplay(TFTs::force);
   Serial.println("Setup finished.");
 }
 
 void loop() {
   uint32_t millis_at_top = millis();
+  weekd = uclock.getWeekDay();
+  date_now = uclock.getDay();
+  month_now = uclock.getMonth();
+  if(!weekd) weekd = 1;	// if not initialized, make it Sunday
   SerialCommandProcessor();
   // Do all the maintenance work
   WifiReconnect(); // if not connected attempt to reconnect
@@ -309,7 +318,27 @@ void loop() {
   EveryFullHour(); // night or daytime
 
   // Update the clock.
-  updateClockDisplay();
+  
+  if(date_display_timer > millis()) {
+    if(first_date_display) {
+      updateClockDateDisplay(TFTs::force);
+      first_date_display = 0;
+    }
+    else {
+      updateClockDateDisplay();
+      first_time_display = 1;
+    }
+  }
+  else {
+    if(first_time_display) {
+      updateClockDisplay(TFTs::force);
+      first_time_display = 0;
+    }
+    else {
+      updateClockDisplay();
+      first_date_display = 1;
+    }
+  }
   
   // Menu
   if (menu.stateChanged() && tfts.isEnabled()) {
@@ -532,4 +561,14 @@ void updateClockDisplay(TFTs::show_t show) {
   tfts.setDigit(MINUTES_TENS, uclock.getMinutesTens(), show);
   tfts.setDigit(HOURS_ONES, uclock.getHoursOnes(), show);
   tfts.setDigit(HOURS_TENS, uclock.getHoursTens(), show);
+}
+
+void updateClockDateDisplay(TFTs::show_t show) {
+  // refresh starting on seconds
+  tfts.setDigit(SECONDS_ONES, uclock.getDayOnes(), show);
+  tfts.setDigit(SECONDS_TENS, uclock.getDayTens(), show);
+  tfts.setDigit(MINUTES_ONES, uclock.getMonthOnes(), show);
+  tfts.setDigit(MINUTES_TENS, uclock.getMonthTens(), show);
+  tfts.setDigit(HOURS_ONES, uclock.getYearOnes(), show);
+  tfts.setDigit(HOURS_TENS, uclock.getYearTens(), show);
 }

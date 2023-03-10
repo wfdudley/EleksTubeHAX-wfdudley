@@ -1,4 +1,6 @@
 #include "Menu.h"
+extern unsigned long date_display_timer;
+extern bool first_date_display, first_time_display;
 
 // Big ol' state machine: menu and buttons as the state, buttons as the transition triggers.
 void Menu::loop(Buttons &buttons) {
@@ -27,7 +29,7 @@ void Menu::loop(Buttons &buttons) {
   
   // Menu is idle. Left or Mode button is pressed, go into the menu, but don't act on the button press. It just wakes up the menu.
   if(state == idle) {
-    if (left_state == Button::down_edge || mode_state == Button::down_edge) {
+    if (mode_state == Button::down_edge) {
       state = states(1);  // Start at the beginning of the menu.
 
       millis_last_button_press = millis();
@@ -41,6 +43,11 @@ void Menu::loop(Buttons &buttons) {
 
       millis_last_button_press = millis();
       state_changed = true;
+      return;
+    }
+    if (left_state == Button::down_edge) {
+      date_display_timer = millis() + 3000;
+      first_date_display = 1;
       return;
     }
   }
