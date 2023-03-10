@@ -16,6 +16,8 @@ Firmware supports and was tested on those three clock versions:
 
 ## Additional features/changes/fixes:
 
+- Only do NTP call on boot and on Sundays.  I don't want to beat up the NTP servers, but checking on Sunday will get the Daylight Savings clock change.
+- Change the UI so that left button causes the display to show the date for 3 seconds.  Pushing the right button jumps directly to the menu item for changing the font.  Center (mode) button is unchanged, still enters the menu at the top.  "Power" button still exits the menu.
 - Allow wifi credentials to be entered using the serial interface. I did this because my router doesn't do WPS.
 - Allow empty fonts to exist; the code thinks there are always 10 fonts installed, but it'll just display blanks if the font files are missing.  This means that you can have fonts 1,3,5 installed and the clock still allows you to choose any of the installed fonts.  (Before, a missing font meant that you couldn't use higher numbered fonts after the first missing font.)
 - Allow NIGHT_TIME to be midnight (0) or early AM and still have the display dim between NIGHT_TIME and DAY_TIME.  (Before, NIGHT_TIME had to be larger than DAY_TIME, which procluded hours 0,1,2 . . .)
