@@ -25,6 +25,8 @@ Firmware supports and was tested on those three clock versions:
 - trimmed some of the fonts (removed black borders) to shrink font size.  The code will automatically center the fonts (aly-fly feature).
 - Wrote a Perl script to allow easier font management.  It allows you to copy a set of font files from the "all_fonts/font-name" directory to the "data" directory.
 - Wrote a Perl script to turn the raw binary fonts into ".CLK" files.
+- Wrote a Perl script to turn the BMP font files into PNG and ".CLK" files.
+- Wrote a Perl script to turn the ".CLK" files into PNG and BMP files.
 - Added instructions for creating a "better" partitioning scheme for the
 flash on the ESP32 so that you can get more fonts in there.
 I can fit two large fonts and three small fonts in the revised partition.
