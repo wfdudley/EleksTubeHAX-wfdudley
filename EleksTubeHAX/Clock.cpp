@@ -96,7 +96,6 @@ time_t Clock::syncProvider() {
   time_t ntp_now, rtc_now;
   rtc_now = RtcGet();
 
-  Serial.print("syncProvider: weekday is "); Serial.println(weekd);
   if ((millis() - millis_last_ntp > refresh_ntp_every_ms) && (weekd == 1) || millis_last_ntp == 0) {
     if (WifiState == connected) {
       // It's time to get a new NTP sync
