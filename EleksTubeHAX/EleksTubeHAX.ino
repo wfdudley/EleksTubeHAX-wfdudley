@@ -28,7 +28,7 @@ StoredConfig stored_config;
 
 bool FullHour = false;
 uint8_t hour_old = 255;
-uint8_t weekd, month_now, date_now;
+uint8_t weekd, t_hour, month_now, date_now;
 unsigned long date_display_timer;
 bool first_date_display, first_time_display;
 bool UpdateTZandDSTeveryNight = false;
@@ -209,9 +209,11 @@ void setup() {
   tfts.println("Clock start");
   uclock.begin(&stored_config.config.uclock);
 
+#ifdef MQTT_ENABLED
   // Setup MQTT
   tfts.println("MQTT start");
   MqttStart();
+#endif
 
 #ifdef GEOLOCATION_ENABLED
   tfts.println("Geoloc query");
@@ -242,6 +244,7 @@ void setup() {
   tfts.fillScreen(TFT_BLACK);
   uclock.loop();
   weekd = uclock.getWeekDay();
+  t_hour = uclock.getHour24();
   updateClockDisplay(TFTs::force);
   Serial.println("Setup finished.");
 }
@@ -249,6 +252,7 @@ void setup() {
 void loop() {
   uint32_t millis_at_top = millis();
   weekd = uclock.getWeekDay();
+  t_hour = uclock.getHour24();
   date_now = uclock.getDay();
   month_now = uclock.getMonth();
   if(!weekd) weekd = 1;	// if not initialized, make it Sunday
@@ -256,6 +260,7 @@ void loop() {
   // Do all the maintenance work
   WifiReconnect(); // if not connected attempt to reconnect
 
+#ifdef MQTT_ENABLED
   MqttStatusPower = tfts.isEnabled();
   MqttStatusState = (uclock.getActiveGraphicIdx()+1) * 5;   // 10 
   MqttLoopFrequently();
@@ -296,6 +301,7 @@ void loop() {
     Serial.println(" Done.");
     */
   }
+#endif
 
   buttons.loop();
 
@@ -481,7 +487,9 @@ void loop() {
     // we still have extra time
     time_in_loop = millis() - millis_at_top;
     if (time_in_loop < 20) {
+#ifdef MQTT_ENABLED
       MqttLoopInFreeTime();
+#endif
       if (TemperatureUpdated) {
         tfts.setDigit(HOURS_ONES, uclock.getHoursOnes(), TFTs::force);  // show latest clock digit and temperature readout together
         TemperatureUpdated = false;
