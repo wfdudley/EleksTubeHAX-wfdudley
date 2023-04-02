@@ -41,21 +41,13 @@
 //#define SECRET_WIFI_SSID            //not needed for WPS
 //#define SECRET_WIFI_PASSWD          //not needed for WPS.  Caution - Hard coded password stored clear text in BIN file
 
-
 //  *************  Geolocation  *************
 // Get your API Key on https://www.abstractapi.com/ (login) --> https://app.abstractapi.com/api/ip-geolocation/tester (key) *************
 //#define GEOLOCATION_API_KEY "key"
 
+// *********most MQTT config moved to USER_DEFINES.h and secrets.h ************
 
-// ************* MQTT config *************
-//#define MQTT_ENABLED  // enable after creating an account, setting up the device on smartnest.cz and pilling in all the data below:
-//#define MQTT_BROKER "smartnest.cz"         
-//#define MQTT_CLIENT "deviceid" 
-//#define MQTT_USERNAME "Username"             
-//#define MQTT_PASSWORD "MQTT_PASSWORD"
-#define MQTT_PORT 1883                         // Broker port
 #define MQTT_RECONNECT_WAIT_SEC  30   // how long to wait between retries to connect to broker
 #define MQTT_REPORT_STATUS_EVERY_SEC  71 // How often report status to MQTT Broker
-
-      
+ 
 #endif

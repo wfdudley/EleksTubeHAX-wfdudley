@@ -36,21 +36,7 @@
 #define GEOLOCATION_ENABLED    // enable after creating an account and copying Geolocation API below:
 
 // ************ MQTT config *********************
-
-#define MQTT_ENABLED
-
-#define MQTT_CLIENT "EleksTubeIPS"		// "base" topic
-#define MQTT_RECONNECT_WAIT_SEC  30  // how long to wait between retries to connect to broker
-#define MQTT_REPORT_STATUS_EVERY_SEC  71 // How often report status to MQTT Broker
-/* MQTT messages are:
-  topic/report/signal		integer = WiFi RSSI (normally < 0)
-  topic/report/network		WiFi SSID
-  topic/report/online		true/false
-  topic/report/firmware		FIRMWARE_VERSION
-  topic/report/ip		<ipv4 address>
-  topic/report/powerState	ON/OFF turns display on/off
-  topic/report/setpoint		integer font number 0-9 -> 5 to 50 by 5's ??
- */
+// MQTT stuff is in USER_DEFINES.h and secrets.h
 
 // ************ Night time operation *********************
 #define BACKLIGHT_DIMMED_INTENSITY  1  // 0..7
